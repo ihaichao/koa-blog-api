@@ -14,6 +14,6 @@ const articleSchema = new Schema({
 	pageView: { type: Number, default: 0 } 
 })
 
-const Article = mongoose.model('Article', artilcleScheme)
+const Article = mongoose.model('Article', articleSchema)
 
 module.exports = Article
