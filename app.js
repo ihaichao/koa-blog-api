@@ -5,6 +5,7 @@ const json = require('koa-json')
 const onerror = require('koa-onerror')
 const bodyparser = require('koa-bodyparser')
 const logger = require('koa-logger')
+const cors = require('koa2-cors')
 
 const index = require('./routes/index')
 const article = require('./routes/article')
@@ -23,6 +24,7 @@ app.use(bodyparser({
 }))
 app.use(json())
 app.use(logger())
+app.use(cors())
 
 app.use(views(__dirname + '/views', {
   extension: 'pug'
