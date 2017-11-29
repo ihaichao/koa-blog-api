@@ -1,13 +1,14 @@
 const Article = require('../model/article')
+const { handleSuccess, handleError } = require('../utils/handle-request')
 
 // 创建文章
 async function create (ctx) {
 	const article = ctx.request.body
 	try {
 		const res = await new Article(article).save()
-		console.log('文章创建成功: ', res)
+		handleSuccess(ctx)
 	} catch (err) {
-		console.log('文章创建失败: ', err)
+		handleError(ctx, err)
 	}
 }
 
@@ -16,13 +17,24 @@ async function remove (ctx) {
 	const articleId = ctx.params.articleId
 	try {
 		await Article.findByIdAndRemove(articleId)
-		console.log('文章删除成功: ')
+		handleSuccess(ctx)
 	} catch (err) {
-		console.log('文章删除失败: ', err)
+		handleError(ctx, err)
+	}
+}
+
+// 获取文章列表
+async function list (ctx) {
+	try {
+		const list = await Article.find()
+		handleSuccess(ctx, list)
+	} catch (err) {
+		handleError(ctx, err)
 	}
 }
 
 module.exports = {
 	create,
-	remove
+	remove,
+	list
 }
