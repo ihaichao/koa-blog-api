@@ -1,3 +1,4 @@
+const moment = require('moment')
 const Article = require('../model/article')
 const { handleSuccess, handleError } = require('../utils/handle-request')
 
@@ -26,7 +27,18 @@ async function remove (ctx) {
 // 获取文章列表
 async function list (ctx) {
 	try {
-		const list = await Article.find()
+		let list = await Article.find()
+		list = list.map(item => {
+			return {
+				title: item.title,
+				tag: item.tag,
+				content: item.content,
+				createTime: moment(item.createTime).format("YYYY-MM-DD HH:mm:ss"),
+				updateTime: moment(item.updateTime).format("YYYY-MM-DD HH:mm:ss"),
+				id: item._id,
+				pageView: item.pageView
+			}
+		})
 		handleSuccess(ctx, list)
 	} catch (err) {
 		handleError(ctx, err)

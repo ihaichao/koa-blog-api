@@ -6,7 +6,7 @@ exports.handleSuccess = (ctx, res) => {
 	}
 }
 
-exports.handleError = (err = '请求失败') => {
+exports.handleError = (ctx, err = '请求失败') => {
 	ctx.body = {
 		code: 1,
 		data: null,
