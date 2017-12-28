@@ -5,7 +5,7 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
-const articleSchema = new Schema({
+const ArticleSchema = new Schema({
 	title: { type: String, required: true, validate: /\S+/ },
 	tag: { type: String }, 
 	content: { type: String, required: true, validate: /\S+/ },
@@ -14,6 +14,6 @@ const articleSchema = new Schema({
 	pageView: { type: Number, default: 0 } 
 })
 
-const Article = mongoose.model('Article', articleSchema)
+const Article = mongoose.model('Article', ArticleSchema)
 
 module.exports = Article

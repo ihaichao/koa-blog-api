@@ -1,8 +1,8 @@
-exports.handleSuccess = (ctx, res) => {
+exports.handleSuccess = (ctx, res, message = 'success') => {
 	ctx.body = {
 		code: 0,
 		data: res,
-		message: 'success'
+		message: message
 	}
 }
 
