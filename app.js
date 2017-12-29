@@ -12,6 +12,8 @@ const index = require('./routes/index')
 const article = require('./routes/article')
 const user = require('./routes/user')
 
+const { handleError } = require('./utils/handle-request')
+
 const mongodb = require('./mongodb')
 
 // databse
@@ -23,13 +25,13 @@ onerror(app)
 app.keys = ['secket key']
 
 const CONFIG = {
-  key: 'koa:sess', /** (string) cookie key (default is koa:sess) */
+  key: 'SESSIONID', /** (string) cookie key (default is koa:sess) */
   /** (number || 'session') maxAge in ms (default is 1 days) */
   /** 'session' will result in a cookie that expires when session/browser is closed */
   /** Warning: If a session cookie is stolen, this cookie will never expire */
-  maxAge: 86400000,
+  maxAge: 24 * 60 * 60 * 1000,
   overwrite: true, /** (boolean) can overwrite or not (default true) */
-  httpOnly: true, /** (boolean) httpOnly or not (default true) */
+  httpOnly: false, /** (boolean) httpOnly or not (default true) */
   signed: true, /** (boolean) signed or not (default true) */
   rolling: false, /** (boolean) Force a session identifier cookie to be set on every response. The expiration is reset to the original maxAge, resetting the expiration countdown. default is false **/
 }
@@ -42,11 +44,20 @@ app.use(bodyparser({
 }))
 app.use(json())
 app.use(logger())
-app.use(cors())
-
-app.use(views(__dirname + '/views', {
-  extension: 'pug'
+app.use(cors({
+  credentials: true
 }))
+
+// app.use(views(__dirname + '/views', {
+//   extension: 'pug'
+// }))
+
+app.use(async (ctx, next) => {
+  if (ctx.path !== '/login' && !ctx.session.username) {
+    handleError(ctx, '来者何人，胆敢擅闯禁地！')
+  }
+  next()
+})
 
 // logger
 app.use(async (ctx, next) => {

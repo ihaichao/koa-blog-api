@@ -10,10 +10,7 @@ async function login (ctx) {
     const user = await User.findOne({ username: formData.username })
     const isMatch = await user.comparePassword(formData.password)
     if (isMatch) {
-      ctx.session.user = {
-        username: formData.username,
-        password: formData.password
-      }
+      ctx.session.username = formData.username
       handleSuccess(ctx, {
         success: isMatch
       })
