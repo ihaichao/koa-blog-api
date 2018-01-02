@@ -48,17 +48,6 @@ app.use(cors({
   credentials: true
 }))
 
-// app.use(views(__dirname + '/views', {
-//   extension: 'pug'
-// }))
-
-app.use(async (ctx, next) => {
-  if (ctx.path !== '/login' && !ctx.session.username) {
-    handleError(ctx, '来者何人，胆敢擅闯禁地！')
-  }
-  next()
-})
-
 // logger
 app.use(async (ctx, next) => {
   const start = new Date()
@@ -67,10 +56,19 @@ app.use(async (ctx, next) => {
   console.log(`${ctx.method} ${ctx.url} - ${ms}ms`)
 })
 
+// authority control
+app.use(async (ctx, next) => {
+  if (ctx.path !== '/login' && !ctx.session.username) {
+    return handleError(ctx, '来者何人，胆敢擅闯禁地！')
+  }
+  await next()
+})
+
 // routes
 app.use(index.routes(), index.allowedMethods())
 app.use(article.routes(), article.allowedMethods())
 app.use(user.routes(), user.allowedMethods())
+
 
 // error-handling
 app.on('error', (err, ctx) => {
