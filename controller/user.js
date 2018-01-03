@@ -2,9 +2,9 @@ const User = require('../model/user')
 const { handleSuccess, handleError } = require('../utils/handle-request')
 
 /**
- * 登录验证
+ * 登录
  */
-async function login (ctx) {
+exports.login = async function (ctx) {
   const formData = ctx.request.body
   try {
     const user = await User.findOne({ username: formData.username })
@@ -22,6 +22,15 @@ async function login (ctx) {
   }
 }
 
-module.exports = {
-  login
+/**
+ * 是否登录
+ */
+exports.isLogin = async function (ctx) {
+  if (ctx.session.username) {
+    handleSuccess(ctx, {
+      isLogin: true
+    })
+  } else {
+    handleError(ctx, '用户未登录')
+  }
 }

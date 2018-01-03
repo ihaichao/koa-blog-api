@@ -22,7 +22,7 @@ mongodb.connect()
 // error handler
 onerror(app)
 
-app.keys = ['secket key']
+app.keys = ['haichao']
 
 const CONFIG = {
   key: 'SESSIONID', /** (string) cookie key (default is koa:sess) */
@@ -31,7 +31,7 @@ const CONFIG = {
   /** Warning: If a session cookie is stolen, this cookie will never expire */
   maxAge: 24 * 60 * 60 * 1000,
   overwrite: true, /** (boolean) can overwrite or not (default true) */
-  httpOnly: false, /** (boolean) httpOnly or not (default true) */
+  httpOnly: true, /** (boolean) httpOnly or not (default true) */
   signed: true, /** (boolean) signed or not (default true) */
   rolling: false, /** (boolean) Force a session identifier cookie to be set on every response. The expiration is reset to the original maxAge, resetting the expiration countdown. default is false **/
 }
@@ -58,7 +58,7 @@ app.use(async (ctx, next) => {
 
 // authority control
 app.use(async (ctx, next) => {
-  if (ctx.path !== '/login' && !ctx.session.username) {
+  if (!ctx.path.match(/\/user/) && !ctx.session.username) {
     return handleError(ctx, '来者何人，胆敢擅闯禁地！')
   }
   await next()
